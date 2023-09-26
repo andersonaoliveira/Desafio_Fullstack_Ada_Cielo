@@ -3,12 +3,11 @@ package com.ada.precadastrodeclientes.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 import com.ada.precadastrodeclientes.model.Cliente;
 import com.ada.precadastrodeclientes.repository.ClienteRepository;
+
+import java.util.List;
 
 @Service
 public class ClienteService {
@@ -19,13 +18,8 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    @Transactional
     public Cliente criarCliente(Cliente cliente) {
         validarCamposObrigatorios(cliente);
-        validarCnpj(cliente.getCnpj());
-        validarCpf(cliente.getCpf());
-        validarMcc(cliente.getMcc());
-        validarNomeContato(cliente.getNome());
         validarEmail(cliente.getEmail());
 
         if (cliente.getCnpj() != null && cliente.getCnpj().length() != 14) {
@@ -36,23 +30,15 @@ public class ClienteService {
             throw new IllegalArgumentException("CPF deve ter 11 dígitos formatados com zeros à esquerda.");
         }
 
-        Optional<Cliente> clienteExistenteCnpj = clienteRepository.findByCnpjOptional(cliente.getCnpj());
-        if (clienteExistenteCnpj.isPresent()) {
+        if (clienteRepository.existsByCnpj(cliente.getCnpj())) {
             throw new IllegalArgumentException("Cliente com CNPJ já cadastrado.");
         }
 
-        Optional<Cliente> clienteExistenteCpf = clienteRepository.findByCpfOptional(cliente.getCpf());
-        if (clienteExistenteCpf.isPresent()) {
+        if (clienteRepository.existsByCpf(cliente.getCpf())) {
             throw new IllegalArgumentException("Cliente com CPF já cadastrado.");
         }
-        
-        if (!isValidEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Email inválido.");
-        }
 
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        return clienteSalvo;
+        return clienteRepository.save(cliente);
     }
 
     private void validarCamposObrigatorios(Cliente cliente) {
@@ -62,31 +48,7 @@ public class ClienteService {
             throw new IllegalArgumentException("Todos os campos obrigatórios devem ser preenchidos.");
         }
     }
-    
-    private void validarCnpj(String cnpj) {
-        if (cnpj != null && cnpj.length() != 14) {
-            throw new IllegalArgumentException("CNPJ deve ter 14 dígitos formatados com zeros à esquerda.");
-        }
-    }
-    
-    private void validarCpf(String cpf) {
-        if (cpf != null && cpf.length() != 11) {
-            throw new IllegalArgumentException("CPF deve ter 11 dígitos formatados com zeros à esquerda.");
-        }
-    }
-    
-    private void validarMcc(String mcc) {
-        if (mcc != null && mcc.length() > 4) {
-            throw new IllegalArgumentException("MCC deve ter no máximo 4 caracteres.");
-        }
-    }
-    
-    private void validarNomeContato(String nomeContato) {
-        if (nomeContato != null && nomeContato.length() > 50) {
-            throw new IllegalArgumentException("Nome do contato deve ter no máximo 50 caracteres.");
-        }
-    }
-    
+
     private void validarEmail(String email) {
         String regex = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
         if (email == null || !email.matches(regex)) {
@@ -94,37 +56,27 @@ public class ClienteService {
         }
     }
 
-    private boolean isValidEmail(String email) {
-        String regex = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
-        return email.matches(regex);
+    public Cliente consultarClientePorId(String id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
-    @Transactional
-    public Cliente consultarClientePorId(Long id) {
-        Optional<Cliente> clienteExistente = clienteRepository.findById(id);
+    public Cliente atualizarCliente(String id, Cliente clienteAtualizado) {
+        Cliente clienteExistente = consultarClientePorId(id);
 
-        if (!clienteExistente.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado.");
-        }
+        clienteExistente.setNome(clienteAtualizado.getNome());
+        clienteExistente.setEmail(clienteAtualizado.getEmail());
+        clienteExistente.setMcc(clienteAtualizado.getMcc());
 
-        return clienteExistente.get();
+        return clienteRepository.save(clienteExistente);
     }
 
-    @Transactional
-    public Cliente atualizarCliente(Long id, Cliente clienteAtualizado) {
-        Optional<Cliente> clienteExistente = clienteRepository.findById(id);
+    public void excluirCliente(String id) {
+        Cliente clienteExistente = consultarClientePorId(id);
+        clienteRepository.delete(clienteExistente);
+    }
 
-        if (!clienteExistente.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado.");
-        }
-
-        Cliente clienteParaAtualizar = clienteExistente.get();
-    
-        clienteParaAtualizar.setNome(clienteAtualizado.getNome());
-        clienteParaAtualizar.setEmail(clienteAtualizado.getEmail());
-        clienteParaAtualizar.setMcc(clienteAtualizado.getMcc());
-
-        clienteAtualizado = clienteRepository.save(clienteParaAtualizar);
-        return clienteAtualizado;
+    public List<Cliente> listarClientes() {
+        return clienteRepository.findAll();
     }
 }

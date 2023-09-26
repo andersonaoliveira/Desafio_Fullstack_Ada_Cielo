@@ -1,14 +1,20 @@
 package com.ada.precadastrodeclientes.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+
 import java.util.List;
 import java.util.Optional;
 import com.ada.precadastrodeclientes.model.Cliente;
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+public interface ClienteRepository extends MongoRepository<Cliente, String> {
+
+    boolean existsByCnpj(String cnpj);
+
+    boolean existsByCpf(String cpf);
 
     List<Cliente> findByCnpj(String cnpj);
-    
+
     Cliente findByEmail(String email);
 
     List<Cliente> findByMcc(String mcc);
@@ -16,8 +22,4 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByNome(String nome);
 
     List<Cliente> findByCpf(String cpf);
-
-    Optional<Cliente> findByCnpjOptional(String cnpj);
-
-    Optional<Cliente> findByCpfOptional(String cpf);
 }
