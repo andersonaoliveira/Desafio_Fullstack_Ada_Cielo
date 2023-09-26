@@ -1,4 +1,4 @@
-package com.example.precadastrodeclientes;
+package com.ada.precadastrodeclientes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
