@@ -22,12 +22,24 @@ public class ClienteService {
         validarCamposObrigatorios(cliente);
         validarEmail(cliente.getEmail());
 
-        if (cliente.getCnpj() != null && cliente.getCnpj().length() != 14) {
-            throw new IllegalArgumentException("CNPJ deve ter 14 dígitos formatados com zeros à esquerda.");
+        if (cliente.getCnpj() != null && !cliente.getCnpj().isEmpty()) {
+            if (cliente.getCnpj().length() != 14) {
+                throw new IllegalArgumentException("CNPJ deve ter 14 dígitos formatados com zeros à esquerda.");
+            }
+    
+            if (clienteRepository.existsByCnpj(cliente.getCnpj())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Cliente com CNPJ já cadastrado.");
+            }
         }
-
+    
         if (cliente.getCpf() != null && cliente.getCpf().length() != 11) {
             throw new IllegalArgumentException("CPF deve ter 11 dígitos formatados com zeros à esquerda.");
+        }
+
+        if (cliente.getCpf() != null) {
+            if (clienteRepository.existsByCpf(cliente.getCpf())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Cliente com CPF já cadastrado.");
+            }
         }
 
         if (clienteRepository.existsByCnpj(cliente.getCnpj())) {

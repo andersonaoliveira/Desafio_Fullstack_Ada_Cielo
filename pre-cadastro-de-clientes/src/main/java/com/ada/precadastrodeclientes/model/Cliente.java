@@ -8,14 +8,15 @@ import lombok.Data;
 @Data
 public class Cliente {
     @Id
-    private String id;
-    
+    private String id;    
     private String nome;
     private String email;
     private String mcc;
+    private String cpf;
     
+    //exclusivo de pessoa jurídica
     private String cnpj;
     private String razaoSocial;
 
-    private String cpf;
+
 }
