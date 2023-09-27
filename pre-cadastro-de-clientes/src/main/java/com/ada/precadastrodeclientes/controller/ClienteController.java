@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:80")
+@CrossOrigin(origins = "http://192.168.0.100:3000")
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
