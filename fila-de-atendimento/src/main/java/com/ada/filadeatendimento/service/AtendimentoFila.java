@@ -1,0 +1,33 @@
+package com.ada.filadeatendimento.service;
+
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import org.springframework.stereotype.Service;
+
+import com.ada.filadeatendimento.model.ClienteNaFila;
+
+@Service
+public class AtendimentoFila {
+    private Queue<ClienteNaFila> fila;
+
+    public AtendimentoFila() {
+        this.fila = new LinkedList<>();
+    }
+
+    public void adicionaCliente(ClienteNaFila cliente) {
+        this.fila.add(cliente);
+    }
+
+    public ClienteNaFila removeCliente() throws NoSuchElementException {
+        if (this.fila.isEmpty()) {
+            throw new NoSuchElementException("A fila de atendimento está vazia.");
+        } else {
+            return this.fila.poll();
+        }
+    }
+
+    public Queue<ClienteNaFila> getFila() {
+        return fila;
+    }
+}
