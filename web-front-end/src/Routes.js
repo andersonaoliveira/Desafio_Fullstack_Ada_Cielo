@@ -6,6 +6,7 @@ import AtualizacaoCadastro from './pages/AtualizacaoCadastro';
 import VisualizacaoFila from './pages/VisualizacaoFila';
 import Login from './pages/Login';
 import VisualizacaoClientes from './pages/VisualizacaoClientes';
+import Index from './pages/Index';
 
 function MinhasRotas() {
     return (
@@ -16,6 +17,7 @@ function MinhasRotas() {
           <Route path="/visualizacao-fila" element={<VisualizacaoFila />} />
           <Route path="/login" element={<Login />} />
           <Route path="/visualizacao-clientes" element={<VisualizacaoClientes />} />
+          <Route path="/" element={<Index />} />
         </Routes>
       </Router>
     );

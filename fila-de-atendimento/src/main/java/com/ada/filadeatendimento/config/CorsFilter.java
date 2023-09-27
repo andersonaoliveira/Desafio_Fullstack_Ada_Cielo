@@ -1,4 +1,4 @@
-package com.ada.precadastrodeclientes.config;
+package com.ada.filadeatendimento.config;
 
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.Filter;

@@ -29,7 +29,7 @@ public class AtendimentoFila {
 
     public ClienteNaFila removeCliente() throws NoSuchElementException {
         if (this.fila.isEmpty()) {
-            throw new NoSuchElementException("A fila de atendimento está vazia.");
+            return null;
         } else {
             return this.fila.poll();
         }
