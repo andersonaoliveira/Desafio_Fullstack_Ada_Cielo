@@ -16,7 +16,15 @@ public class AtendimentoFila {
     }
 
     public void adicionaCliente(ClienteNaFila cliente) {
-        this.fila.add(cliente);
+        if (cliente != null && cliente.getId() != null) {
+            for (ClienteNaFila clienteExistente : fila) {
+                if (cliente.getId().equals(clienteExistente.getId())) {
+                    fila.remove(clienteExistente);
+                    break;
+                }
+            }
+        }
+        fila.add(cliente);
     }
 
     public ClienteNaFila removeCliente() throws NoSuchElementException {
