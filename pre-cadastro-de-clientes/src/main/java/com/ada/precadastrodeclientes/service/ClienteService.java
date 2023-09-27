@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.RestTemplate;
+
+import com.ada.precadastrodeclientes.enums.TipoCliente;
 import com.ada.precadastrodeclientes.model.Cliente;
 import com.ada.precadastrodeclientes.repository.ClienteRepository;
 
@@ -12,15 +15,21 @@ import java.util.List;
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, RestTemplate restTemplate) {
         this.clienteRepository = clienteRepository;
+        this.restTemplate = restTemplate;
     }
 
     public Cliente criarCliente(Cliente cliente) {
         validarCamposObrigatorios(cliente);
         validarEmail(cliente.getEmail());
+
+        if (cliente.getTipo() == null || !isValidTipoCliente(cliente.getTipo())) {
+            throw new IllegalArgumentException("Tipo de cliente inválido. Deve ser 'FISICA' ou 'JURIDICA'.");
+        }
 
         if (cliente.getCnpj() != null && !cliente.getCnpj().isEmpty()) {
             if (cliente.getCnpj().length() != 14) {
@@ -50,13 +59,22 @@ public class ClienteService {
             throw new IllegalArgumentException("Cliente com CPF já cadastrado.");
         }
 
-        return clienteRepository.save(cliente);
+        Cliente clienteSalvo = clienteRepository.save(cliente);
+        enviarClienteParaFila(clienteSalvo);
+        return clienteSalvo;
+    }
+
+    private boolean isValidTipoCliente(TipoCliente tipo) {
+        return tipo == TipoCliente.FISICA || tipo == TipoCliente.JURIDICA;
     }
 
     private void validarCamposObrigatorios(Cliente cliente) {
         if (cliente.getNome() == null || cliente.getNome().isEmpty() ||
             cliente.getEmail() == null || cliente.getEmail().isEmpty() ||
-            cliente.getMcc() == null || cliente.getMcc().isEmpty()) {
+            cliente.getMcc() == null || cliente.getMcc().isEmpty() ||
+            cliente.getCpf() == null || cliente.getCpf().isEmpty() ||
+            cliente.getTelefone() == null || cliente.getTelefone().isEmpty() ||
+            cliente.getTipo() == null) {
             throw new IllegalArgumentException("Todos os campos obrigatórios devem ser preenchidos.");
         }
     }
@@ -76,11 +94,22 @@ public class ClienteService {
     public Cliente atualizarCliente(String id, Cliente clienteAtualizado) {
         Cliente clienteExistente = consultarClientePorId(id);
 
-        clienteExistente.setNome(clienteAtualizado.getNome());
-        clienteExistente.setEmail(clienteAtualizado.getEmail());
-        clienteExistente.setMcc(clienteAtualizado.getMcc());
+        if (clienteAtualizado.getNome() != null) {
+            clienteExistente.setNome(clienteAtualizado.getNome());
+        }
+        
+        if (clienteAtualizado.getEmail() != null) {
+            clienteExistente.setEmail(clienteAtualizado.getEmail());
+        }
+    
+        if (clienteAtualizado.getMcc() != null) {
+            clienteExistente.setMcc(clienteAtualizado.getMcc());
+        }
 
-        return clienteRepository.save(clienteExistente);
+        Cliente clienteSalvo = clienteRepository.save(clienteExistente);
+
+        enviarClienteParaFila(clienteSalvo);
+        return clienteSalvo;
     }
 
     public void excluirCliente(String id) {
@@ -90,5 +119,10 @@ public class ClienteService {
 
     public List<Cliente> listarClientes() {
         return clienteRepository.findAll();
+    }
+
+    public void enviarClienteParaFila(Cliente cliente) {
+        String url = "http://localhost:8081/fila-de-atendimento/adicionar-cliente";
+        restTemplate.postForEntity(url, cliente, Void.class);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ada.precadastrodeclientes.service.ClienteService;
 import com.ada.precadastrodeclientes.repository.ClienteRepository;
 import com.ada.precadastrodeclientes.model.Cliente;
+import com.ada.precadastrodeclientes.enums.TipoCliente;
 
 
 @SpringBootTest
@@ -29,6 +30,8 @@ public class ClienteServiceTest {
         cliente.setEmail("ada@cielo.com");
         cliente.setMcc("1234");
         cliente.setCpf("00826652069");
+        cliente.setTelefone("5332320101");
+        cliente.setTipo(TipoCliente.FISICA);
 
         Mockito.when(clienteRepository.save(Mockito.any(Cliente.class))).thenReturn(cliente);
 
@@ -39,6 +42,8 @@ public class ClienteServiceTest {
         assertEquals("ada@cielo.com", clienteSalvo.getEmail());
         assertEquals("1234", clienteSalvo.getMcc());
         assertEquals("00826652069", clienteSalvo.getCpf());
+        assertEquals("5332320101", clienteSalvo.getTelefone());
+        assertEquals("FISICA", clienteSalvo.getTipo().name());
     }
 
     @Test
@@ -47,7 +52,9 @@ public class ClienteServiceTest {
         cliente.setNome("Anderson");
         cliente.setEmail("email.inexistente");
         cliente.setMcc("4321");
-        cliente.setCpf("00826652069");        
+        cliente.setCpf("00826652069");
+        cliente.setTelefone("5332320101");
+        cliente.setTipo(TipoCliente.FISICA);
 
         assertThrows(IllegalArgumentException.class, () -> clienteService.criarCliente(cliente));
     }
@@ -58,7 +65,9 @@ public class ClienteServiceTest {
         cliente.setNome("");
         cliente.setEmail("");
         cliente.setMcc("");
-        cliente.setCpf("00826652069"); 
+        cliente.setCpf("00826652069");
+        cliente.setTelefone("5332320101");
+        cliente.setTipo(TipoCliente.FISICA);
 
         assertThrows(IllegalArgumentException.class, () -> clienteService.criarCliente(cliente));
     }
@@ -71,9 +80,11 @@ public class ClienteServiceTest {
         cliente.setMcc("5454");
         cliente.setCnpj("12345678901234");
         cliente.setRazaoSocial("Empresa de Teste");
+        cliente.setTelefone("5332320101");
+        cliente.setTipo(TipoCliente.JURIDICA);
 
         Mockito.when(clienteRepository.existsByCnpj(cliente.getCnpj())).thenReturn(true);
 
-        assertThrows(ResponseStatusException.class, () -> clienteService.criarCliente(cliente));
+        assertThrows(IllegalArgumentException.class, () -> clienteService.criarCliente(cliente));
     }
 }

@@ -2,6 +2,8 @@ package com.ada.precadastrodeclientes.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
+
+import com.ada.precadastrodeclientes.enums.TipoCliente;
 import com.ada.precadastrodeclientes.model.Cliente;
 
 public interface ClienteRepository extends MongoRepository<Cliente, String> {
@@ -19,4 +21,6 @@ public interface ClienteRepository extends MongoRepository<Cliente, String> {
     List<Cliente> findByNome(String nome);
 
     List<Cliente> findByCpf(String cpf);
+
+    List<Cliente> findByTipo(TipoCliente tipo);
 }
