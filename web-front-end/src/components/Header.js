@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { scrollToElement, navigateTo } from '../utils';
 
-function Header() {
-  const [fontSizeIndex, setFontSizeIndex] = useState(0);
+function Header({ fontSizeIndex, adjustFontSize }) {
+  const toggleFontSize = () => {
+    adjustFontSize();
+  };
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -13,11 +15,7 @@ function Header() {
           buttons[buttonIndex].click();
         }
       } else if (event.altKey && event.key === '5') {
-        if (fontSizeIndex < 3) {
-          setFontSizeIndex((prevIndex) => prevIndex + 1);
-        } else {
-          setFontSizeIndex(0);
-        }
+        toggleFontSize();
       }
     }
 
@@ -26,7 +24,7 @@ function Header() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [fontSizeIndex]);
+  }, [toggleFontSize]);
 
   return (
     <header>
@@ -45,7 +43,7 @@ function Header() {
             <button onClick={() => navigateTo('/acessibilidade')}>Acessibilidade [4]</button>
           </li>
           <li>
-            <button>A+/A- [5]</button>
+            <button onClick={toggleFontSize}>A+/A- [5]</button>
           </li>
           <li>
             <button>Alto contraste [6]</button>
@@ -57,3 +55,4 @@ function Header() {
 }
 
 export default Header;
+            

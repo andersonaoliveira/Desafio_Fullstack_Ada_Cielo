@@ -1,13 +1,11 @@
-/* App.css */
-
 .normal-font {
-    font-size: 16px;
-  }
+  font-size: 14px;
+}
     
-  .large-font {
-    font-size: 20px;
-  }
-  
-  .content {
-  }
-  
+.middle-font {
+  font-size: 20px;
+}
+
+.large-font {
+  font-size: 24px;
+}
