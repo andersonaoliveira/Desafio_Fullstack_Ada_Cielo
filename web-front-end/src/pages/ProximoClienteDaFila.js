@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function VisualizacaoFila() {
+function ProximoClienteDaFila() {
   const [cliente, setCliente] = useState(null);
   const [listaVazia, setListaVazia] = useState(false);
 
@@ -58,4 +58,4 @@ function VisualizacaoFila() {
   );
 }
 
-export default VisualizacaoFila;
+export default ProximoClienteDaFila;
