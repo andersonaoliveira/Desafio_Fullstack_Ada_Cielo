@@ -1,5 +1,6 @@
 #Backend
-**/target/
+../fila-de-atendimento/target/
+../pre-cadastro-de-clientes/target/
 
 
 #Aplicação React

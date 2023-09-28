@@ -76,3 +76,17 @@ d) Deve ser apresentada uma mensagem amigável quando for solicitado um prospect
 e) Responsividade: o desafio deve ser desenvolvido para ser responsivo em diferentes dispositivos e tamanhos de tela.
 f) Acessibilidade: o desafio deve ser desenvolvido de forma acessível, seguindo as diretrizes do WCAG2.
 g) Design e UX: o desafio deve ter um bom design e uma boa experiência do usuário, seguindo as melhores práticas de design e UX.
+
+
+
+PATHS DA APLICAÇÃO FRONT:
+
+PÚBLICA:
+- [INDEX](http://localhost:3000)
+- [LOGIN](http://localhost:3000/login)
+- [CADASTRO DE CLIENTE](http://localhost:3000/cadastro-cliente)
+
+PROTEGIDA:
+- [LISTA DE CLIENTES](http://localhost:3000/clientes-cadastrados) com opção para atualizar e apagar cadastro
+- [VISUALIZAÇÃO DA FILA DE ESPERA](http://localhost:3000/visualizacao-fila-de-espera)
+- [VISUALIZAÇÃO DE CLIENTE PRÓXIMO DA FILA](http://localhost:3000/proximo-cliente-da-fila)
