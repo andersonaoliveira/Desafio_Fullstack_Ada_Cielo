@@ -1,0 +1,18 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #212529
+    ;
+    z-index: 1000;
+    text-align: center;
+    padding: 5px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+}

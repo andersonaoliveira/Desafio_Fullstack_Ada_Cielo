@@ -20,7 +20,6 @@ function CadastroCliente() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     const data = {
       cnpj: formData.cnpj,
       razaoSocial: formData.razaoSocial,
@@ -52,91 +51,122 @@ function CadastroCliente() {
   };
 
   return (
-    <div>
-      <h1>Cadastro de Cliente</h1>
-      <form onSubmit={handleSubmit} method="POST">
-      <label>
-          Nome:
-          <input
-            type="text"
-            name="nome"
-            value={formData.nome}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          MCC:
-          <input
-            type="text"
-            name="mcc"
-            value={formData.mcc}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          CPF:
-          <input
-            type="text"
-            name="cpf"
-            value={formData.cpf}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Telefone:
-          <input
-            type="text"
-            name="telefone"
-            value={formData.telefone}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Tipo:
-          <input
-            type="text"
-            name="tipo"
-            value={formData.tipo}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          CNPJ:
-          <input
-            type="text"
-            name="cnpj"
-            value={formData.cnpj}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Razão Social:
-          <input
-            type="text"
-            name="razaoSocial"
-            value={formData.razaoSocial}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type="submit">Enviar</button>
-      </form>
+  <div className="container" style={{ maxWidth: '80%', margin: '0 auto' }}>
+  <h1>Cadastro de Cliente</h1>
+  <form onSubmit={handleSubmit} className="row">
+    <div className="col-md-4">
+      <div className="form-group">
+        <label htmlFor="nome">NOME COMPLETO</label>
+        <input
+          type="text"
+          className="form-control"
+          id="nome"
+          name="nome"
+          value={formData.nome}
+          onChange={handleInputChange}
+        />
+      </div>
     </div>
+    <div className="col-md-3">
+      <div className="form-group">
+        <label htmlFor="cpf">CPF</label>
+        <input
+          type="text"
+          className="form-control"
+          id="cpf"
+          name="cpf"
+          value={formData.cpf}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-4">
+      <div className="form-group">
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          className="form-control"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-2">
+      <div className="form-group">
+        <label htmlFor="telefone">Telefone</label>
+        <input
+          type="text"
+          className="form-control"
+          id="telefone"
+          name="telefone"
+          value={formData.telefone}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-1">
+      <div className="form-group">
+        <label htmlFor="mcc">MCC</label>
+        <input
+          type="text"
+          className="form-control"
+          id="mcc"
+          name="mcc"
+          value={formData.mcc}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-1">
+      <div className="form-group">
+        <label htmlFor="tipo">Tipo</label>
+        <select
+          className="form-control"
+          id="tipo"
+          name="tipo"
+          value={formData.tipo}
+          onChange={handleInputChange}
+        >
+          <option value="FISICA">FISICA</option>
+          <option value="JURIDICA">JURIDICA</option>
+        </select>
+      </div>
+    </div>
+    <div className="col-md-3">
+      <div className="form-group">
+        <label htmlFor="cnpj">CNPJ</label>
+        <input
+          type="text"
+          className="form-control"
+          id="cnpj"
+          name="cnpj"
+          value={formData.cnpj}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-4">
+      <div className="form-group">
+        <label htmlFor="razaoSocial">Razão Social</label>
+        <input
+          type="text"
+          className="form-control"
+          id="razaoSocial"
+          name="razaoSocial"
+          value={formData.razaoSocial}
+          onChange={handleInputChange}
+        />
+      </div>
+    </div>
+    <div className="col-md-12">
+      <button type="submit" className="btn btn-primary">
+        Enviar
+      </button>
+    </div>
+  </form>
+</div>
   );
 }
 

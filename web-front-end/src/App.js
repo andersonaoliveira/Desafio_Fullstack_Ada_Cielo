@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import Routes from './Routes';
 import Header from './components/Header';
+import Title from './components/Title';
+import Nav from './components/Nav';
+import Footer from './components/Footer';
 import './assets/styles/font-sizes.css';
 
 function App() {
@@ -17,20 +20,23 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <div>
-          <Header fontSizeIndex={fontSizeIndex} adjustFontSize={adjustFontSize} />
-        </div>
-        <nav id="nav-menu">
-          {/* falta fazer um menu nav */}
-        </nav>
-        <div id="conteudo" className={fontSizeIndex === 0 ? 'normal-font' : (fontSizeIndex === 1 ? 'middle-font' : fontSizeIndex === 2 ? 'large-font' : '')}>
-          <Routes />
-        </div>
-        <footer id="rodape">
-          {/* Rodapé aqui */}
-        </footer>
+      <header>
+        <Header fontSizeIndex={fontSizeIndex} adjustFontSize={adjustFontSize} />
       </header>
+      <section id="titulo">
+        <Title />
+      </section>
+      <main>
+        <nav id="nav-menu">
+        <Nav />
+        </nav>
+        <section id="conteudo" className={fontSizeIndex === 0 ? 'normal-font' : (fontSizeIndex === 1 ? 'middle-font' : fontSizeIndex === 2 ? 'large-font' : '')}>
+          <Routes />
+        </section>
+      </main>
+      <footer id="rodape">
+        <Footer />
+      </footer>      
     </div>
   );
 }
