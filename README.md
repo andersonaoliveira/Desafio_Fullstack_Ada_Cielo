@@ -284,23 +284,49 @@ Lembre-se de configurar o banco de dados MongoDB de acordo com suas necessidades
 
 O **Fila de Atendimento** é uma aplicação em Maven que atua como um microsserviço para gerenciar uma fila de clientes em espera. Ele recebe o cadastro de clientes de outras aplicações, os coloca em uma fila FIFO (First-In-First-Out) e fornece endpoints para consultar informações sobre a fila e atender os clientes na ordem de chegada.
 
-### Funcionalidades
+### Endpoints Disponíveis
 
-1. **Listar Clientes na Fila**
-   - Endpoint: `/fila-de-atendimento/clientes-na-fila`
-   - Descrição: Retorna a lista de clientes que estão na fila de espera.
+#### Listagem de Clientes na Fila
 
-2. **Obter Número de Clientes na Fila**
-   - Endpoint: `/fila-de-atendimento/numero-de-clientes-na-fila`
-   - Descrição: Retorna o número de clientes atualmente na fila de espera.
+- **Método**: GET
+- **Endpoint**: `/fila-de-atendimento/clientes-na-fila`
+- **Descrição**: Retorna a lista de clientes na fila de espera.
+- **Exemplo**: [http://localhost:8081/fila-de-atendimento/clientes-na-fila](http://localhost:8081/fila-de-atendimento/clientes-na-fila)
 
-3. **Obter Próximo Cliente**
-   - Endpoint: `/fila-de-atendimento/proximo-cliente`
-   - Descrição: Retorna o próximo cliente da fila para atendimento, seguindo a ordem de chegada.
+#### Número de Clientes na Fila
 
-4. **Adicionar Cliente à Fila**
-   - Endpoint: `/fila-de-atendimento/adicionar-cliente`
-   - Descrição: Permite adicionar um cliente à fila de espera.
+- **Método**: GET
+- **Endpoint**: `/fila-de-atendimento/numero-de-clientes-na-fila`
+- **Descrição**: Retorna o número de clientes atualmente na fila de espera.
+- **Exemplo**: [http://localhost:8081/fila-de-atendimento/numero-de-clientes-na-fila](http://localhost:8081/fila-de-atendimento/numero-de-clientes-na-fila)
+
+#### Próximo Cliente a ser Atendido
+
+- **Método**: GET
+- **Endpoint**: `/fila-de-atendimento/proximo-cliente`
+- **Descrição**: Retorna o próximo cliente a ser atendido e o remove da fila.
+- **Exemplo**: [http://localhost:8081/fila-de-atendimento/proximo-cliente](http://localhost:8081/fila-de-atendimento/proximo-cliente)
+
+#### Adicionar Cliente à Fila
+
+- **Método**: POST
+- **Endpoint**: `/fila-de-atendimento/adicionar-cliente`
+- **Descrição**: Adiciona um cliente à fila de espera.
+- **Corpo da Solicitação**: Um objeto JSON contendo os detalhes do cliente.
+- **Exemplo**:
+  ```json
+  {
+    "id": "1",
+    "nome": "Nome do Cliente",
+    "mcc": "1234",
+    "cpf": "12345678901",
+    "email": "cliente@example.com",
+    "telefone": "123-456-7890",
+    "tipo": "JURIDICA",
+    "cnpj": "12345678901234",
+    "razaoSocial": "Razão Social da Empresa"
+  }
+  ```
 
 ### Model de Cliente
 
@@ -343,36 +369,275 @@ A aplicação estará disponível em `http://localhost:8081`.
 
 ## FRONT END
 
-* <p align='justify'> ESCREVER AQUI.</p>
+### Projeto Web Front End React
 
+Este documento descreve o projeto em React que atua como uma interface de usuário para acessar os dois microsserviços Java mencionados acima e um banco de dados MongoDB. O projeto permite o cadastro de clientes por meio de um formulário e interage com os microsserviços para obter informações sobre os clientes e gerenciar uma fila de atendimento.
+
+### Requisitos
+
+Certifique-se de que você tenha as seguintes dependências instaladas antes de executar o projeto:
+
+- Node.js: [Download Node.js](https://nodejs.org/)
+- npm (gerenciador de pacotes Node.js)
+
+### Instalação
+
+1. Clone o repositório do projeto no seu ambiente local:
+
+```bash
+git clone https://github.com/andersonaoliveira/Desafio_Fullstack_Ada_Cielo.git
+cd web-front-end
+```
+
+2. Instale as dependências do projeto usando o npm:
+
+```bash
+npm install
+```
+
+### Configuração
+
+Antes de executar o projeto, você precisa verificar as URLs dos microsserviços Java. A aplicação pre-cadastro-de-clientes deve ser executada na porta 8080, enquanto a aplicação fila-de-atendimento na porta 8081, em caso de alteração será necessário modificar os arquivos da pasta "pages"
+
+### Execução
+
+Para iniciar o aplicativo React, execute o seguinte comando:
+
+```bash
+npm start
+```
+
+O aplicativo será iniciado e estará disponível em `http://localhost:3000` no seu navegador. Caso opte por abrir via docker-compose, abrirá na porta 80. As configurações de CORs dos microsserviços permitem o acesso de ambas as portas.
+
+### Funcionalidades Principais
+
+Aqui estão as principais funcionalidades do aplicativo React:
+
+#### Cadastro de Clientes
+
+- Acesse a página de cadastro de clientes clicando em "Cadastrar Cliente" no menu.
+- Preencha o formulário com as informações do cliente.
+- Clique no botão "Enviar" para cadastrar o cliente. Os dados serão enviados para o microsserviço Java correspondente.
+
+#### Clientes Cadastrados
+
+- Acesse a página de clientes cadastrados clicando em "Clientes Cadastrados" no menu.
+- Você verá uma lista de clientes cadastrados no banco de dados MongoDB. Você pode apagar ou atualizar os clientes a partir desta página.
+
+#### Visualização da Fila de Espera
+
+- Acesse a página de visualização da fila de espera clicando em "Fila de Espera" no menu.
+- Você poderá ver o próximo cliente na fila de atendimento. Você também pode atualizar a fila para ver o próximo cliente.
+
+#### Próximo Cliente da Fila
+
+- Acesse a página de próximo cliente da fila clicando em "Próximo Cliente da Fila" no menu.
+- Você poderá ver o cliente que deverá ser atendido na fila de espera. Você pode avançar para o próximo cliente quando o atendimento for concluído.
+
+### Acessibilidade
+
+O projeto inclui recursos de acessibilidade, como opções de aumento/diminuição de fonte e alto contraste. Você pode acessar esses recursos clicando nos botões correspondentes no menu de acessibilidade ou pressionando as teclas ```Alt + "número correspondente"```.
+
+### Estrutura do Projeto
+
+- `package.json`: Contém as dependências e scripts do projeto.
+- `src/Routes.js`: Define as rotas do aplicativo, as URLs.
+- `src/pages/`: Contém as diferentes páginas do aplicativo.
+- `src/components/`: Contém os componentes reutilizáveis, como cabeçalho e rodapé.
+- `src/assets/`: Contém os arquivos de estilos, imagens e outros recursos.
+
+### Conclusão
+
+Este projeto em React oferece uma interface de usuário para interagir com microsserviços Java e um banco de dados MongoDB para o cadastro de clientes e gerenciamento de uma fila de atendimento.
 <br><div align="right">[Subir ao Início](#home)</div><br>
 
 ## BANCO DE DADOS
 
-* <p align='justify'> ESCREVER AQUI.</p>
+Esta documentação fornece uma visão geral do banco de dados utilizado em nossas aplicações
 
+Nossos microsserviços utilizam o MongoDB, um banco de dados NoSQL orientado a documentos, para armazenar informações dos clientes que são cadastrados para posterior atendimento em fila. Abaixo estão os detalhes do banco de dados:
+
+- **Tipo de Banco de Dados**: MongoDB
+- **Host**: localhost
+- **Porta**: 27017
+- **Nome do banco**: banco_de_dados
+
+### Estrutura do Banco de Dados
+
+O MongoDB é um banco de dados NoSQL que armazena dados em documentos BSON (formato binário JSON). Neste banco de dados, a aplicação utiliza uma coleção para armazenar os detalhes dos clientes que estão na fila de atendimento. Abaixo estão os detalhes da coleção:
+
+#### Coleção `cliente`
+
+- **Documentos**:
+
+  Cada documento na coleção representa os detalhes de um cliente cadastrado. Os campos do documento correspondem aos atributos do objeto `Cliente` em nossos microsserviços.
+
+  Exemplo de documento:
+
+  ```json
+  {
+    "_id": ObjectId("5d7a4a536a3d2a1e4c30153a"),
+    "id": "123",
+    "nome": "Nome do Cliente",
+    "mcc": "1234",
+    "cpf": "12345678901",
+    "email": "cliente@email.com",
+    "telefone": "+1234567890",
+    "tipo": "FISICA",
+    "cnpj": null,
+    "razao_social": null
+  }
+  ```
+
+- **Índices**:
+
+### Exemplo de Consulta
+
+Aqui está um exemplo de consulta MongoDB simples que permite recuperar todos os clientes cadastrados:
+
+```javascript
+db.cliente.find({});
+```
 <br><div align="right">[Subir ao Início](#home)</div><br>
 
 ## SWAGGER
 
-* <p align='justify'> ESCREVER AQUI.</p>
+### Documentação da API com Swagger
 
+Este projeto utiliza o Swagger para fornecer uma documentação interativa e detalhada da API. O Swagger simplifica a exploração e o teste dos endpoints da API diretamente no navegador. Siga as instruções abaixo para acessar a documentação Swagger:
+
+#### Acesso à Documentação Swagger
+
+1. Certifique-se de que a aplicação esteja em execução. Caso não esteja, você pode iniciar a aplicação com o seguinte comando:
+
+   ```
+   mvn spring-boot:run
+   ```
+
+2. Abra um navegador da web.
+
+3. Acesse a interface Swagger em:
+
+   ```
+   http://localhost:8080/swagger-ui.html
+   ```
+
+   Isso abrirá a página principal da documentação Swagger.
+
+### Explorando a Documentação
+
+A interface Swagger fornece uma visão geral dos endpoints disponíveis e permite que você teste as operações diretamente na página. Aqui está o que você pode fazer na documentação:
+
+- **Listagem de Endpoints**: A página inicial exibe uma lista de todos os endpoints da API. Clique em um endpoint para ver mais detalhes.
+
+- **Detalhes do Endpoint**: Ao clicar em um endpoint, você verá informações detalhadas, incluindo os métodos HTTP suportados, parâmetros, exemplos de solicitação e resposta, entre outros.
+
+- **Teste de Endpoint**: Você pode testar um endpoint diretamente na documentação. Basta clicar no botão "Try it out" e preencher os campos de entrada. Em seguida, clique em "Execute" para enviar a solicitação.
+
+- **Visualização do Modelo de Dados**: A documentação também inclui informações sobre os modelos de dados usados na API, como a estrutura de um objeto de cliente.
+
+### Benefícios da Documentação Swagger
+
+A documentação Swagger é uma ferramenta valiosa para desenvolvedores, testadores e qualquer pessoa que precise interagir com a API. Ela oferece:
+
+- **Facilidade de Uso**: Permite explorar e entender rapidamente a API.
+
+- **Teste Direto**: Você pode testar os endpoints sem precisar de ferramentas externas.
+
+- **Exemplos Claros**: Mostra exemplos claros de solicitações e respostas.
+
+- **Economia de Tempo**: Reduz o tempo gasto na pesquisa de informações sobre a API.
+
+Aproveite a documentação Swagger para explorar e interagir com a API deste projeto.
 <br><div align="right">[Subir ao Início](#home)</div><br>
 
 ## CONTAINERIZACAO
 
-* <p align='justify'> ESCREVER AQUI.</p>
+O Docker foi escolhido por sua variedade de imagens, agilidade e por ser a ferramenta mais utilizada. Rodar a aplicação em container permite disponibilidade, segurança, agilidade, economia de recursos, escalabilidade dentre outras. Para configuração do Docker utilizamos o docker-compose em conjunto com os Dockerfile de cada aplicação.
 
+O projeto é composto por três serviços principais: `pre-cadastro-de-clientes`, `fila-de-atendimento` e `web-front-end`, e utiliza o MongoDB como banco de dados. Cada serviço é definido em um contêiner Docker separado.
+
+### Pré-requisitos
+
+Certifique-se de ter o Docker e o Docker Compose instalados em seu sistema antes de prosseguir.
+
+- [Instalação do Docker](https://docs.docker.com/get-docker/)
+- [Instalação do Docker Compose](https://docs.docker.com/compose/install/)
+
+### Como Executar as Aplicações com Docker
+
+Siga as etapas abaixo para configurar e executar as aplicações em contêineres Docker:
+
+1. Clone o repositório do projeto para o seu ambiente local, se ainda não o tiver feito:
+
+   ```bash
+   git clone [https://github.com/andersonaoliveira/Desafio_Fullstack_Ada_Cielo.git]
+   ```
+
+2. Navegue até o diretório raiz do projeto:
+
+   ```bash
+   cd [Desafio_Fullstack_Ada_Cielo]
+   ```
+
+3. Execute o seguinte comando para construir as imagens Docker e iniciar os serviços:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   Isso criará e iniciará todos os contêineres Docker necessários com base nas configurações definidas no arquivo `docker-compose.yml`. Os serviços ficarão em execução em segundo plano.
+
+4. Após a conclusão bem-sucedida, você pode acessar as seguintes aplicações nos seguintes URLs:
+
+   - **Pré-Cadastro de Clientes**: [http://localhost:8080](http://localhost:8080)
+   - **Fila de Atendimento**: [http://localhost:8081](http://localhost:8081)
+   - **Web Front-End**: [http://localhost](http://localhost)
+
+5. Para parar os serviços e remover os contêineres Docker, execute o seguinte comando no diretório do projeto:
+
+   ```bash
+   docker-compose down
+   ```
+
+### Estrutura de Diretórios do Projeto
+
+- `pre-cadastro-de-clientes/`: Código-fonte e configuração para o serviço de Pré-Cadastro de Clientes.
+- `fila-de-atendimento/`: Código-fonte e configuração para o serviço de Fila de Atendimento.
+- `web-front-end/`: Código-fonte e configuração para o serviço Web Front-End.
+- `docker-compose.yml`: Arquivo de composição Docker que define os serviços e suas configurações.
+
+### Observações
+
+- Certifique-se de que as portas especificadas nos serviços (por exemplo, 8080, 8081, 80) não estejam em uso por outros processos em sua máquina.
+- Os contêineres Docker para o MongoDB e cada serviço serão construídos a partir das imagens base especificadas nos arquivos `Dockerfile`.
+- Você pode personalizar ainda mais as configurações do Docker, como nomes de contêineres e volumes, diretamente no arquivo `docker-compose.yml` conforme necessário.
 <br><div align="right">[Subir ao Início](#home)</div><br>
 
 ## DESENVOLVEDOR RESPONSAVEL
 
-* <p align='justify'> ESCREVER AQUI.</p>
+<a href="https://github.com/andersonaoliveira"><img src="https://avatars.githubusercontent.com/u/90530503?v=4" width="100px;" alt="Foto do Anderson de Aguiar de Oliveira no GitHub"/><br><sub><b>Anderson de Aguiar de Oliveira</b></sub></a>
 
 <br><div align="right">[Subir ao Início](#home)</div><br>
 
 ## AGRADECIMENTO
 
-* <p align='justify'> ESCREVER AQUI.</p>
+**Prezadas ADA e Cielo**
+
+<p align='justify'>Gostaria de expressar minha sincera gratidão por me proporcionarem a incrível oportunidade de participar do "Bootcamp Ada/Cielo FullStack". É com grande alegria que escrevo estas palavras, pois sei que essa jornada está apenas começando, e foi graças a vocês que estou tendo essa chance transformadora.</p>
+
+<p align='justify'>Ao longo desse processo seletivo desafiador, desde a prova de aptidão tech até a resolução de case, pude perceber o comprometimento e o esforço das equipes da ADA e da Cielo em identificar e apoiar talentos promissores como os que estiveram comigo nessa jornada. A competição foi intensa, com mais de 3400 candidatos, mas saber que fui escolhido entre os 125 que tiveram a oportunidade de seguir adiante foi uma honra e uma responsabilidade que levei muito a sério.</p>
+
+<p align='justify'>Também é importante mencionar que, embora alguns candidatos tenham desistido no meio do caminho, eu me mantive firme, determinado a superar cada desafio que se apresentou. Essa experiência não apenas testou minha habilidade técnica, mas também fortaleceu minha resiliência e determinação.</p>
+
+<p align='justify'>Agora, com o desafio individual concluído e a perspectiva de aprender e crescer ainda mais na minha profissão, estou verdadeiramente empolgado. Sei que esta foi uma oportunidade única para aprimorar minhas habilidades e contribuir de forma significativa para evoluir no setor de tecnologia.</p>
+
+<p align='justify'>Portanto, gostaria de agradecer novamente à ADA e à Cielo por acreditarem em meu potencial e por investirem em meu desenvolvimento. Estou ansioso pelo que vem a seguir, mas ter aprendido tanto e em tão pouco tempo, com tanta gente boa e qualificada me fazem crer que estou pronto. Com determinação e gratidão, estou comprometido em fazer o máximo possível para justificar a confiança que vocês depositaram em mim.</p>
+
+Muito obrigado por esta oportunidade incrível.
+
+Atenciosamente,
+
+Anderson de Aguiar de Oliveira
 
 <br><div align="right">[Subir ao Início](#home)</div><br>

@@ -39,6 +39,26 @@ public class CorsFilter implements Filter {
             httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         } 
+        if ("http://192.168.0.100:3000".equals(origin)) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+            httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+        }
+
+        if ("http://localhost:3000".equals(origin)) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+            httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+        }
+        
+        if ("http://web-front-end:3000".equals(origin)) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+            httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+        } 
 
         chain.doFilter(request, response);
     }
