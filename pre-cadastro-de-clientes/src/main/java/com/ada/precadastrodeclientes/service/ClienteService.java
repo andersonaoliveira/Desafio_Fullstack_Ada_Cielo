@@ -1,6 +1,5 @@
 package com.ada.precadastrodeclientes.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,7 +16,6 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final RestTemplate restTemplate;
 
-    @Autowired
     public ClienteService(ClienteRepository clienteRepository, RestTemplate restTemplate) {
         this.clienteRepository = clienteRepository;
         this.restTemplate = restTemplate;
@@ -31,14 +29,22 @@ public class ClienteService {
             throw new IllegalArgumentException("Tipo de cliente inválido. Deve ser 'FISICA' ou 'JURIDICA'.");
         }
 
-        if (cliente.getCnpj() != null && !cliente.getCnpj().isEmpty()) {
-            if (cliente.getCnpj().length() != 14) {
-                throw new IllegalArgumentException("CNPJ deve ter 14 dígitos formatados com zeros à esquerda.");
-            }
+        if (cliente.getTipo() == TipoCliente.JURIDICA) {
+
+            if (cliente.getCnpj() != null && !cliente.getCnpj().isEmpty()) {
+                if (cliente.getCnpj().length() != 14) {
+                    throw new IllegalArgumentException("CNPJ deve ter 14 dígitos formatados com zeros à esquerda.");
+                }
     
-            if (clienteRepository.existsByCnpj(cliente.getCnpj())) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Cliente com CNPJ já cadastrado.");
+                if (clienteRepository.existsByCnpj(cliente.getCnpj())) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Cliente com CNPJ já cadastrado.");
+                }
             }
+        }
+
+        if (cliente.getTipo() == TipoCliente.FISICA) {
+            cliente.setCnpj("");
+            cliente.setRazaoSocial("");
         }
     
         if (cliente.getCpf() != null && cliente.getCpf().length() != 11) {
@@ -49,10 +55,6 @@ public class ClienteService {
             if (clienteRepository.existsByCpf(cliente.getCpf())) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Cliente com CPF já cadastrado.");
             }
-        }
-
-        if (clienteRepository.existsByCnpj(cliente.getCnpj())) {
-            throw new IllegalArgumentException("Cliente com CNPJ já cadastrado.");
         }
 
         if (clienteRepository.existsByCpf(cliente.getCpf())) {

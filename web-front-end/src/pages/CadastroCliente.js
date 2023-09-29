@@ -7,7 +7,7 @@ function CadastroCliente() {
     cpf: '',
     email: '',
     telefone: '',
-    tipo: '',
+    tipo: 'FISICA',
     cnpj: '',
     razaoSocial: '',
   });
