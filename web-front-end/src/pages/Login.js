@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/styles/login.css';
 import login from '../assets/images/logo-login.png';
+import styled from 'styled-components';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');

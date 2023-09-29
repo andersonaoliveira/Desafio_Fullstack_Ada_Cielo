@@ -17,26 +17,33 @@ function App() {
       setFontSizeIndex(0);
     }
   };
-
   return (
     <div className="App">
       <header>
         <Header fontSizeIndex={fontSizeIndex} adjustFontSize={adjustFontSize} />
       </header>
-      <section id="titulo">
-        <Title />
-      </section>
-      <main>
-        <nav id="nav-menu">
-        <Nav />
-        </nav>
-        <section id="conteudo" className={fontSizeIndex === 0 ? 'normal-font' : (fontSizeIndex === 1 ? 'middle-font' : fontSizeIndex === 2 ? 'large-font' : '')}>
+      <div class="table-responsive">
+      <table border="0" table-layout = "auto">
+      <tr>
+      <td colspan="4" align="center"><section id="titulo"><Title /></section></td>
+      </tr>
+      <tr>
+      <td rowspan="3" colspan="1"><section id="nav-menu"><Nav /></section></td>
+      <td rowspan="3" colspan="3"><section id="conteudo" className={
+              fontSizeIndex === 0
+              ? 'normal-font'
+              : fontSizeIndex === 1
+              ? 'middle-font'
+              : fontSizeIndex === 2
+              ? 'large-font'
+              : ''
+          }
+        >
           <Routes />
-        </section>
-      </main>
+        </section></td></tr></table></div>
       <footer id="rodape">
         <Footer />
-      </footer>      
+      </footer>
     </div>
   );
 }

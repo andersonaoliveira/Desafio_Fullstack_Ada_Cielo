@@ -5,6 +5,7 @@ import CadastroCliente from './pages/CadastroCliente';
 import ClientesCadastrados from './pages/ClientesCadastrados';
 import AtualizacaoCadastro from './pages/AtualizacaoCadastro';
 import ProximoClienteDaFila from './pages/ProximoClienteDaFila';
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Acessibilidade from './pages/Acessibilidade';
 import VisualizacaoFilaDeEspera from './pages/VisualizacaoFilaDeEspera';
@@ -19,6 +20,7 @@ function MinhasRotas() {
         <Route path="/cadastro-cliente" element={<CadastroCliente />} />
         <Route path="/atualizacao-cadastro/:id" element={<AtualizacaoCadastro />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/acessibilidade" element={<Acessibilidade />} />
         <Route path="/" element={<Index />} />
 

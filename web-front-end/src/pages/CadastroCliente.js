@@ -52,7 +52,10 @@ function CadastroCliente() {
 
   return (
   <div className="container" style={{ maxWidth: '80%', margin: '0 auto' }}>
-  <h1>Cadastro de Cliente</h1>
+
+
+
+<fieldset><legend><h1>CADASTRO DE CLIENTE</h1></legend>
   <form onSubmit={handleSubmit} className="row">
     <div className="col-md-4">
       <div className="form-group">
@@ -166,6 +169,7 @@ function CadastroCliente() {
       </button>
     </div>
   </form>
+  </fieldset>
 </div>
   );
 }

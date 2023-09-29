@@ -52,46 +52,47 @@ function ClientesCadastrados() {
   
   return (
     <div>
-      <h1>Clientes Cadastrados</h1>
+      <fieldset><legend><h1>Clientes Cadastrados</h1></legend>
       {erro ? (
         <p>{erro}</p>
       ) : (
-        <table>
+        <table class="table table-striped">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>MCC</th>
-              <th>CPF</th>
-              <th>Telefone</th>
-              <th>Tipo</th>
-              <th>CNPJ</th>
-              <th>Razão Social</th>
-              <th>Ações</th>
+              <th scope="col">ID</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Email</th>
+              <th scope="col">MCC</th>
+              <th scope="col">CPF</th>
+              <th scope="col">Telefone</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">CNPJ</th>
+              <th scope="col">Razão Social</th>
+              <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody>
             {clientes.map((cliente) => (
               <tr key={cliente.id}>
-                <td>{cliente.id}</td>
-                <td>{cliente.nome}</td>
-                <td>{cliente.email}</td>
-                <td>{cliente.mcc}</td>
-                <td>{cliente.cpf}</td>
-                <td>{cliente.telefone}</td>
-                <td>{cliente.tipo}</td>
-                <td>{cliente.cnpj}</td>
-                <td>{cliente.razaoSocial}</td>
-                <td>
-                  <button onClick={() => handleApagarCliente(cliente.id)}>Apagar</button>
-                  <button onClick={() => handleAtualizarCliente(cliente.id)}>Atualizar</button>
+                <td scope="row">{cliente.id}</td>
+                <td scope="row">{cliente.nome}</td>
+                <td scope="row">{cliente.email}</td>
+                <td scope="row">{cliente.mcc}</td>
+                <td scope="row">{cliente.cpf}</td>
+                <td scope="row">{cliente.telefone}</td>
+                <td scope="row">{cliente.tipo}</td>
+                <td scope="row">{cliente.cnpj}</td>
+                <td scope="row">{cliente.razaoSocial}</td>
+                <td scope="row">
+                  <button type="button" class="btn btn-outline-danger" onClick={() => handleApagarCliente(cliente.id)}>Apagar</button>&nbsp;&nbsp;
+                  <button type="button" class="btn btn-outline-primary" onClick={() => handleAtualizarCliente(cliente.id)}>Atualizar</button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>        
       )}
+      </fieldset>
     </div>
   );
 }
