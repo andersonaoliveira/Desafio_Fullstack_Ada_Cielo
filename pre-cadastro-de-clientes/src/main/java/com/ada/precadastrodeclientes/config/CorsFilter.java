@@ -19,21 +19,21 @@ public class CorsFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String origin = httpRequest.getHeader("Origin");
 
-        if ("http://192.168.0.100:3000".equals(origin)) {
+        if ("http://192.168.0.100:80".equals(origin)) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setHeader("Access-Control-Allow-Origin", origin);
             httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         }
 
-        if ("http://localhost:3000".equals(origin)) {
+        if ("http://localhost:80".equals(origin)) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setHeader("Access-Control-Allow-Origin", origin);
             httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         }
         
-        if ("http://web-front-end:3000".equals(origin)) {
+        if ("http://web-front-end:80".equals(origin)) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setHeader("Access-Control-Allow-Origin", origin);
             httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");

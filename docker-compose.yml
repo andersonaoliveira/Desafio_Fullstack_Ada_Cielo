@@ -1,0 +1,39 @@
+  version: '3'
+  services:
+    pre-cadastro-de-clientes:
+      build:
+        context: ./pre-cadastro-de-clientes
+        dockerfile: Dockerfile
+      ports:
+        - "8080:8080"
+      depends_on:
+        - mongodb
+
+    fila-de-atendimento:
+      build:
+        context: ./fila-de-atendimento
+        dockerfile: Dockerfile
+      ports:
+        - "8081:8081"
+      depends_on:
+        - mongodb
+
+    web-front-end:
+      build:
+        context: ./web-front-end
+        dockerfile: Dockerfile
+      ports:
+        - "80:80"
+      depends_on:
+        - mongodb
+
+    mongodb:
+      image: mongo:latest
+      ports:
+        - "27017:27017"
+      environment:
+        - MONGODB_HOST=localhost
+        - MONGODB_PORT=27017
+        - MONGODB_DATABASE=banco_de_dados
+      volumes:
+        - ./data/db:/data/db
