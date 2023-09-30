@@ -1,11 +1,16 @@
 package com.ada.precadastrodeclientes;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.client.RestTemplate;
 
 import com.ada.precadastrodeclientes.service.ClienteService;
 import com.ada.precadastrodeclientes.repository.ClienteRepository;
@@ -145,5 +150,38 @@ public class ClienteServiceTest {
         clienteService.excluirCliente("3");
 
         Mockito.verify(clienteRepository, Mockito.times(1)).delete(clienteExistente);
+    }
+
+    @Test
+    public void testAtualizarClienteComSucesso() {
+
+        Cliente clienteExistente = new Cliente();
+        clienteExistente.setId("1");
+        clienteExistente.setNome("Cliente Existente");
+        clienteExistente.setEmail("cliente@existente.com");
+        clienteExistente.setMcc("1234");
+        clienteExistente.setCpf("12345678901");
+        clienteExistente.setTelefone("5332320101");
+        clienteExistente.setTipo(TipoCliente.FISICA);
+
+        Cliente clienteAtualizado = new Cliente();
+        clienteAtualizado.setNome("Cliente Atualizado");
+        clienteAtualizado.setEmail("atualizado@cliente.com");
+        clienteAtualizado.setMcc("5678");
+        clienteAtualizado.setTelefone("5332320202");
+
+        ClienteRepository clienteRepository = Mockito.mock(ClienteRepository.class);
+        Mockito.when(clienteRepository.findById("1")).thenReturn(java.util.Optional.of(clienteExistente));
+        Mockito.when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteExistente);
+        RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
+
+        ClienteService clienteService = new ClienteService(clienteRepository, restTemplate);
+
+        Cliente clienteAtualizadoResult = clienteService.atualizarCliente("1", clienteAtualizado);
+
+        assertEquals("Cliente Atualizado", clienteAtualizadoResult.getNome());
+        assertEquals("atualizado@cliente.com", clienteAtualizadoResult.getEmail());
+        assertEquals("5678", clienteAtualizadoResult.getMcc());
+        assertEquals("5332320202", clienteAtualizadoResult.getTelefone());
     }
 }
