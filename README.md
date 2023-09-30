@@ -521,6 +521,10 @@ Este projeto utiliza o Swagger para fornecer uma documentação interativa e det
    ```
    http://localhost:8080/swagger-ui.html
    ```
+   ou
+   ```
+   http://localhost:8081/swagger-ui.html
+   ```
 
    Isso abrirá a página principal da documentação Swagger.
 
@@ -547,6 +551,15 @@ A documentação Swagger é uma ferramenta valiosa para desenvolvedores, testado
 - **Exemplos Claros**: Mostra exemplos claros de solicitações e respostas.
 
 - **Economia de Tempo**: Reduz o tempo gasto na pesquisa de informações sobre a API.
+
+Segue, exemplos do Swagger aplicado em nossos serviços:
+
+Pré-cadastro de clientes:
+<img src="arquivos\swagger-pre-cadastro-de-cliente.png">
+
+Fila de atendimento:
+<img src="arquivos\swagger-fila-de-atendimento.png">
+
 
 Aproveite a documentação Swagger para explorar e interagir com a API deste projeto.
 <br><div align="right">[Subir ao Início](#home)</div><br>
@@ -641,3 +654,26 @@ Atenciosamente,
 Anderson de Aguiar de Oliveira
 
 <br><div align="right">[Subir ao Início](#home)</div><br>
+
+------------
+
+Pequeno manual de instruções para rodar a aplicação em servidor próprio:
+
+Tenho o MongoDB sendo executado na porta padrão 27017
+
+Instale as dependências das aplicações fila-de-atendimento, pre-cadastro-de-clientes e web-front-end
+
+Abra 3 terminais.
+
+Terminal 1:
+Abra a pasta raiz da aplicação fila-de-atendimento e digite o comando: ```mvn clean install``` , após instaladas as dependências, você pode executar a aplicação pelo comando ```mvn exec:java```. Deixe a janela do terminal aberta.
+
+Terminal 2:
+Abra a pasta raiz da aplicação pre-cadastro-de-clientes e digite o comando: ```mvn clean install``` , após instaladas as dependências, você pode executar a aplicação pelo comando ```mvn exec:java```. Deixe a janela do terminal aberta.
+
+Terminal 3:
+Abra a pasta raiz da aplicação web-front-end e digite o comando ```npm install```, após instaladas as dependências node, execute a aplicação pelo comando ```yarn start```
+
+Pronto, mantenha estes terminais abertos e a aplicação deve estar rodando no front e no backend.
+
+----------------------
