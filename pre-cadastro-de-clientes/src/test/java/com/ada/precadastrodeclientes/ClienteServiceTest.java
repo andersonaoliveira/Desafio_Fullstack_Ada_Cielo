@@ -23,7 +23,7 @@ public class ClienteServiceTest {
     private ClienteRepository clienteRepository;
 
     @Test
-    public void testCriarCliente() {
+    public void testeCriarClienteComSucesso() {
         Cliente cliente = new Cliente();
         cliente.setNome("Anderson de Aguiar de Oliveira");
         cliente.setEmail("ada@cielo.com");
@@ -85,5 +85,65 @@ public class ClienteServiceTest {
         Mockito.when(clienteRepository.existsByCnpj(cliente.getCnpj())).thenReturn(true);
 
         assertThrows(IllegalArgumentException.class, () -> clienteService.criarCliente(cliente));
+    }
+
+    @Test
+    public void testCriarClientePessoaFisicaComCNPJInvalido() {
+        Cliente cliente = new Cliente();
+        cliente.setNome("Anderson Teste");
+        cliente.setEmail("anderson@teste.com.br");
+        cliente.setMcc("4561");
+        cliente.setCpf("00826652069");
+        cliente.setTelefone("5332320101");
+        cliente.setCnpj("178901234");
+        cliente.setRazaoSocial("Empresa de Teste");
+        cliente.setTipo(TipoCliente.JURIDICA);
+
+        assertThrows(IllegalArgumentException.class, () -> clienteService.criarCliente(cliente));
+    }
+
+    @Test
+    public void testCriarClientePessoaFisicaComCNPJValido() {
+        Cliente cliente = new Cliente();
+        cliente.setNome("Anderson Teste");
+        cliente.setEmail("anderson@teste.com.br");
+        cliente.setMcc("4561");
+        cliente.setCpf("05526652069");
+        cliente.setTelefone("5332320101");
+        cliente.setCnpj("65432878941547");
+        cliente.setRazaoSocial("Empresa de Teste");
+        cliente.setTipo(TipoCliente.JURIDICA);
+
+        Mockito.when(clienteRepository.save(Mockito.any(Cliente.class))).thenReturn(cliente);
+
+        Cliente clienteSalvo = clienteService.criarCliente(cliente);
+
+        assertNotNull(clienteSalvo);
+        assertEquals("Anderson Teste", clienteSalvo.getNome());
+        assertEquals("anderson@teste.com.br", clienteSalvo.getEmail());
+        assertEquals("4561", clienteSalvo.getMcc());
+        assertEquals("05526652069", clienteSalvo.getCpf());
+        assertEquals("5332320101", clienteSalvo.getTelefone());
+        assertEquals("JURIDICA", clienteSalvo.getTipo().name());
+        assertEquals("65432878941547",clienteSalvo.getCnpj());
+        assertEquals("Empresa de Teste",clienteSalvo.getRazaoSocial());
+    }
+
+    @Test
+    public void testExcluirClienteComSucesso() {
+        Cliente clienteExistente = new Cliente();
+        clienteExistente.setId("3");
+        clienteExistente.setNome("Cliente a ser excluído");
+        clienteExistente.setEmail("excluir@cielo.com");
+        clienteExistente.setMcc("5678");
+        clienteExistente.setCpf("12345678901");
+        clienteExistente.setTelefone("5332320101");
+        clienteExistente.setTipo(TipoCliente.FISICA);
+
+        Mockito.when(clienteRepository.findById("3")).thenReturn(java.util.Optional.of(clienteExistente));
+
+        clienteService.excluirCliente("3");
+
+        Mockito.verify(clienteRepository, Mockito.times(1)).delete(clienteExistente);
     }
 }

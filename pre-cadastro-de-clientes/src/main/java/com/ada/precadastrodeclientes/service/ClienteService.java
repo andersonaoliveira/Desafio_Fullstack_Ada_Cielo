@@ -108,6 +108,10 @@ public class ClienteService {
             clienteExistente.setMcc(clienteAtualizado.getMcc());
         }
 
+        if (clienteAtualizado.getTelefone() != null) {
+            clienteExistente.setTelefone(clienteAtualizado.getTelefone());
+        }
+
         Cliente clienteSalvo = clienteRepository.save(clienteExistente);
 
         enviarClienteParaFila(clienteSalvo);

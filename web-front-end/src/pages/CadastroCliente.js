@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Notificacao from '../components/Notificacao';
 
 function CadastroCliente() {
   const [formData, setFormData] = useState({
@@ -12,9 +13,18 @@ function CadastroCliente() {
     razaoSocial: '',
   });
 
+  const [alerta, setAlerta] = useState(null);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const exibirAlerta = (mensagem, tipo) => {
+    setAlerta({ mensagem, tipo });
+    setTimeout(() => {
+      setAlerta(null);
+    }, 5000);
   };
 
   const handleSubmit = async (e) => {
@@ -41,22 +51,40 @@ function CadastroCliente() {
       });
 
       if (response.ok) {
-        console.log('Dados do cliente enviados com sucesso');
+        exibirAlerta('Dados do cliente enviados com sucesso', 'success');
+        setFormData({
+          nome: '',
+          mcc: '',
+          cpf: '',
+          email: '',
+          telefone: '',
+          tipo: 'FISICA',
+          cnpj: '',
+          razaoSocial: '',
+        });
       } else {
-        console.error('Erro ao enviar os dados do cliente');
+        exibirAlerta('Erro ao enviar os dados do cliente', 'danger');
       }
     } catch (error) {
       console.error('Erro ao enviar a solicitação:', error);
+      exibirAlerta('Erro ao enviar a solicitação', 'danger');
     }
   };
 
   return (
-  <div className="container" style={{ maxWidth: '80%', margin: '0 auto' }}>
-
-
-
-<fieldset><legend><h1>CADASTRO DE CLIENTE</h1></legend>
-  <form onSubmit={handleSubmit} className="row">
+    <div className="container" style={{ maxWidth: '80%', margin: '0 auto' }}>
+      <fieldset>
+        <legend>
+          <h1>CADASTRO DE CLIENTE</h1>
+        </legend>
+        {alerta && (
+          <Notificacao
+            mensagem={alerta.mensagem}
+            tipo={alerta.tipo}
+            onClose={() => setAlerta(null)}
+          />
+        )}
+        <form onSubmit={handleSubmit} className="row">
     <div className="col-md-4">
       <div className="form-group">
         <label htmlFor="nome">NOME COMPLETO</label>
@@ -164,13 +192,13 @@ function CadastroCliente() {
       </div>
     </div>
     <div className="col-md-12">
-      <button type="submit" className="btn btn-primary">
-        Enviar
-      </button>
+            <button type="submit" className="btn btn-primary">
+              Enviar
+            </button>
+          </div>
+        </form>
+      </fieldset>
     </div>
-  </form>
-  </fieldset>
-</div>
   );
 }
 
