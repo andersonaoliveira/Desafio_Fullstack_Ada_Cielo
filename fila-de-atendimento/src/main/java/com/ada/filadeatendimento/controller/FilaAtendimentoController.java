@@ -15,6 +15,12 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import com.ada.filadeatendimento.model.ClienteNaFila;
 import com.ada.filadeatendimento.service.AtendimentoFila;
 
@@ -29,12 +35,22 @@ public class FilaAtendimentoController {
         this.fila = fila;
     }
 
+    @Operation(summary = "Exibe clientes que aguardam na fila.") 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = ClienteNaFila.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/clientes-na-fila")
     public ResponseEntity<List<ClienteNaFila>> listCustomersInQueue() {
         List<ClienteNaFila> customersInQueue = new ArrayList<>(fila.getFila());
         return ResponseEntity.ok(customersInQueue);
     }
 
+    @Operation(summary = "Exibe o número de clientes que aguardam na fila.") 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = ClienteNaFila.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/numero-de-clientes-na-fila")
     public ResponseEntity<Integer> getNumberOfCustomersInQueue() {
         int numberOfCustomers = fila.getFila().size();
@@ -42,6 +58,11 @@ public class FilaAtendimentoController {
     }
 
 
+    @Operation(summary = "Exibe o próximo cliente da fila e apaga da memória da fila.") 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = ClienteNaFila.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/proximo-cliente")
     public ResponseEntity<Object> getNextCustomer() {
         ClienteNaFila nextCustomer = fila.removeCliente();
@@ -60,6 +81,11 @@ public class FilaAtendimentoController {
         }
     }
 
+    @Operation(summary = "Adiciona um cliente novo na fila.") 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = ClienteNaFila.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping("/adicionar-cliente")
     public ResponseEntity<Void> addCustomerToQueue(@RequestBody ClienteNaFila cliente) {
         fila.adicionaCliente(cliente);
